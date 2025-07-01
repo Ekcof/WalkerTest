@@ -19,9 +19,11 @@ public interface IMovement
 	void LookAt(Vector2 targetPosition);
 }
 
-
+[DisallowMultipleComponent]
 public class Movement : MonoBehaviour, IMovement
 {
+	private const float FOLLOW_REPATH_THRESHOLD = 0.05f;
+
 	[SerializeField] private float _moveSpeed = 3f;
 	[SerializeField] private Ease _moveEase = Ease.Linear;
 	[SerializeField] private LookType _defaultLookType = LookType.None;
@@ -31,7 +33,7 @@ public class Movement : MonoBehaviour, IMovement
 	private Tween _moveTween;
 	private Transform _followTarget;
 	private LookType _currentLookType;
-	private bool _isFollowing;
+	protected bool _isFollowing;
 	private CancellationTokenSource _followCts;
 
 	private void Awake()
@@ -101,7 +103,6 @@ public class Movement : MonoBehaviour, IMovement
 
 	private async UniTaskVoid FollowAsync(CancellationToken token)
 	{
-		const float FOLLOW_REPATH_THRESHOLD = 0.05f;
 
 		while (_isFollowing && _followTarget != null && !token.IsCancellationRequested)
 		{
@@ -153,6 +154,17 @@ public class Movement : MonoBehaviour, IMovement
 
 		if (_currentLookType == LookType.Target || force)
 			_rb.transform.rotation = Quaternion.Euler(0, 0, angle);
-		// Path Ч можно добавить отдельно
+		// TODO: Add path
+	}
+
+	private void OnDestroy()
+	{
+		_followCts?.CancelAndDispose();
+		_moveTween?.Kill();
+		_moveTween = null;
+		_followTarget = null;
+		_isFollowing = false;
+		_followCts = null;
+		_moveDirection = Vector2.zero;
 	}
 }

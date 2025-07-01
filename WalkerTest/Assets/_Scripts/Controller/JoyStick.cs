@@ -72,7 +72,7 @@ namespace Controller
 					OnDirectionChanged?.Invoke(_inputDirection.Value);
 				}
 
-				Debug.Log($"Joystick Direction: {_inputDirection}");
+				//Debug.Log($"Joystick Direction: {_inputDirection}");
 			}
 		}
 
@@ -80,5 +80,6 @@ namespace Controller
 		{
 			_handle.anchoredPosition = Vector2.zero;
 		}
+
 	}
 }
