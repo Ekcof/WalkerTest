@@ -22,6 +22,7 @@ namespace Scene.UI
 			colorKeys = new[]
 	{
 		new GradientColorKey(Color.red, 0f),
+		new GradientColorKey(Color.yellow, 0.5f),
 		new GradientColorKey(Color.green, 1f)
 	}
 		};

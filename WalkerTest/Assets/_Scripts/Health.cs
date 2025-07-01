@@ -13,7 +13,7 @@ public class Health : MonoBehaviour, IValueObserver
 
 	public IReadOnlyReactiveProperty<float> CurrentValue => _currentHealth;
 
-	public void ApplyChange(float amount)
+	public void TryApplyChange(float amount)
 	{
 		throw new System.NotImplementedException();
 	}
