@@ -9,6 +9,7 @@ namespace Scene.Character
 {
 	public interface IState: IDisposable
 	{
+		bool IsInitialized { get; }
 		void Initialize(ICharacter character);
 		void Start();
 		void Update();
@@ -19,6 +20,7 @@ namespace Scene.Character
 	{
 		protected ICharacter _root;
 		protected CancellationTokenSource Cts;
+		public bool IsInitialized => _root != null;
 
 		public virtual void Initialize(ICharacter character)
 		{

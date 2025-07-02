@@ -12,6 +12,8 @@ namespace Scene.Character
 		string Name { get; }
 		Transform Transform { get; }
 		Vector3 Position { get; }
+
+		string Hash { get; }
 		Health Health { get; }
         IMovement Movement { get; }
         IInventory Inventory { get; }
@@ -27,12 +29,14 @@ namespace Scene.Character
 		[SerializeField] private MainInventory _inventory;
 		[SerializeField] private Health _health;
 		[SerializeField] private SimpleAnimator _animator;
+		[SerializeField] protected string _name;
 		protected IState CurrentState;
 
 		public string ID { get; private set; }
 		public string Name { get; private set; }
 		public Transform Transform => transform;
 		public Vector3 Position => transform.position;
+		public string Hash => $"{_id}_{transform.GetHashCode()}";
 		public IState State => CurrentState;
 		public IAnimator Animator => _animator;
 		public IMovement Movement => _movement;
@@ -48,6 +52,12 @@ namespace Scene.Character
 		protected void SetState(IState state)
 		{
 			CurrentState?.Stop();
+
+			if (!state.IsInitialized)
+			{
+				state.Initialize(this);
+			}
+
 			CurrentState = state;
 			CurrentState?.Start();
 		}

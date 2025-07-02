@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 
@@ -7,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour, IValueObserver
 {
 	[SerializeField] private float _maxHealth = 100f;
-	private ReactiveProperty<float> _currentHealth = new();
+	private ReactiveProperty<float> _currentHealth = new(100f);
 
 	public float MaxValue => _maxHealth;
 
@@ -15,7 +13,13 @@ public class Health : MonoBehaviour, IValueObserver
 
 	public void TryApplyChange(float amount)
 	{
-		throw new System.NotImplementedException();
+		if (_currentHealth.Value > 0)
+		{
+			_currentHealth.Value += amount;
+		}
+		Debug.Log($"____Try apply {amount} change {CurrentValue}");
+
+		//throw new System.NotImplementedException();
 	}
 
 	public void Refresh()

@@ -9,7 +9,9 @@ namespace Scene.Detection
         Transform Transform { get; }
 		Vector3 Position { get; }
 		int Priority { get; }
-    }
+		float GetDistance(Vector3 position);
+		float GetDistance(Vector2 position);
+	}
 
     public class Target : ITarget
     {
@@ -22,6 +24,16 @@ namespace Scene.Detection
 		{
 			Character = character;
 			Priority = priority;
+		}
+
+		public float GetDistance(Vector3 position)
+		{
+			return Vector3.Distance(position, Position);
+		}
+
+		public float GetDistance(Vector2 position)
+		{
+			return Vector2.Distance(position, Position);
 		}
 	}
 }
