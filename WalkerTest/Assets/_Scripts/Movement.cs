@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour, IMovement
 	private LookType _currentLookType;
 	protected bool _isFollowing;
 	private CancellationTokenSource _followCts;
+	public Vector2 CurrentDirection => _moveDirection;
 
 	private void Awake()
 	{
@@ -66,7 +67,7 @@ public class Movement : MonoBehaviour, IMovement
 
 		_moveTween = DOTween.To(() => _rb.position, x => {
 			_rb.MovePosition(x);
-			UpdateLookDirection(position); // Поворот
+			UpdateLookDirection(position); // Rotate
 		}, position, duration)
 		.SetEase(_moveEase)
 		.OnComplete(() => _moveTween = null);

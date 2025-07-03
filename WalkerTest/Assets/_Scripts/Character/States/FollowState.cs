@@ -1,45 +1,22 @@
-using Scene.Detection;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace Scene.Character
 {
-	public class FollowState : State
+	public class FollowState : TargetedState
 	{
-		public ITarget Target { get; private set; }
-		private bool _isRight;
+		protected override string LeftKey => "MoveLeft";
 
-		public void SetTarget(ITarget target)
-		{
-			Target = target;
-		}
+		protected override string RightKey => "MoveRight";
 
 		public override void Start()
 		{
-			_root.Movement?.Follow(Target.Character.Transform);
-
-			SetAnimForSide();
+			_root.Movement.Follow(Target.Transform);
+			SetAnimationFromSide(CurrentSide);
 		}
 
 		public override void Update()
 		{
 			base.Update();
 
-			SetAnimForSide();
-		}
-
-		private void SetAnimForSide()
-		{
-			var currentSide = Target.Character.Position.x > _root.Position.x;
-
-			if (_isRight != currentSide)
-			{
-				var animName = currentSide ?
-					"MoveRight" : "MoveLeft";
-				_root.Animator?.SetAnimation(animName);
-				_isRight = currentSide;
-			}
+			SetAnimation();
 		}
 	}
 }

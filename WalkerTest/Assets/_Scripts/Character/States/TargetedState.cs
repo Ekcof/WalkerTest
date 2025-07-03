@@ -1,30 +1,39 @@
 using Scene.Detection;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 namespace Scene.Character
 {
-    public abstract class TargetedState : State
-    {
-        protected ITarget CurrentTarget;
+	public abstract class TargetedState : State
+	{
 		protected bool IsRight;
-		public void SetTarget(ITarget target)
+		protected abstract string LeftKey { get; }
+		protected abstract string RightKey { get; }
+		public ITarget Target { get; private set; }
+
+		public bool CurrentSide => Target.Character.Position.x > _root.Position.x;
+
+		public void Start(ITarget target)
 		{
-			CurrentTarget = target;
+			Target = target;
+			Start();
 		}
 
-		protected virtual void SetAnimForSide()
+		protected virtual void SetAnimation(Action onComplete = null)
 		{
-			var currentSide = CurrentTarget.Character.Position.x > _root.Position.x;
+			var currentSide = Target.Character.Position.x > _root.Position.x;
 
 			if (IsRight != currentSide)
 			{
-				var animName = currentSide ?
-					"MoveRight" : "MoveLeft";
-				_root.Animator?.SetAnimation(animName);
 				IsRight = currentSide;
+				SetAnimationFromSide(IsRight, onComplete);
 			}
+		}
+
+		protected void SetAnimationFromSide(bool isRight, Action onComplete = null)
+		{
+			var animName = isRight ?
+	RightKey : LeftKey;
+			_root.Animator?.SetAnimation(animName, onComplete);
 		}
 	}
 }

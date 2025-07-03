@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1da1045d1724d243b96e4a8c6fbe1a7, type: 3}
   m_Name: Configs Installer
   m_EditorClassIdentifier: 
+  _bulletConfigHolder: {fileID: 11400000, guid: 5b7a580e0d793a845a2089a959a72722, type: 2}

@@ -261,7 +261,10 @@ MonoBehaviour:
   _health: {fileID: 7417807907797560488}
   _animator: {fileID: 8819663726747763696}
   _name: 
+  _collider: {fileID: 7417807907060653249}
+  _targetType: 4
   _currentDamage: 25
+  _healthBar: {fileID: 7417807908706193599}
 --- !u!114 &7417807907797560488
 MonoBehaviour:
   m_ObjectHideFlags: 0

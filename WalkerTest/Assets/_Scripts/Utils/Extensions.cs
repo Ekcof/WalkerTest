@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
+using Scene.Fight;
 
 public static class Extensions
 {
@@ -179,5 +180,46 @@ public static class Extensions
 		}
 
 		return false;
+	}
+
+	public static Vector2 GetDirection(this Transform transform, Transform target)
+	{
+		return GetDirection(transform.position, target.position);
+	}
+
+	public static Vector2 GetDirection(this Transform transform, Vector2 target)
+	{
+		return GetDirection(transform.position, target);
+	}
+
+	public static Vector2 GetDirection(this Vector2 position, Vector2 target)
+	{
+		return (target - position).normalized;
+	}
+
+	public static bool HasAll(this TargetType self, TargetType flags)
+	{
+		return (self & flags) == flags;
+	}
+
+	public static bool HasAnyCommon(this TargetType a, TargetType b)
+	{
+		return (a & b) != 0;
+	}
+
+	public static void SetListener(this UnityEngine.UI.Button button, Action action)
+	{
+		if (button.IsNullUniversal()) return;
+
+		button.onClick.RemoveAllListeners();
+		button.onClick.AddListener(() => action?.Invoke());
+	}
+
+	public static bool IsNullUniversal<T>(this T instance)
+	{
+		if (instance is UnityEngine.Object unityObject)
+			return unityObject == null;
+
+		return instance == null;
 	}
 }

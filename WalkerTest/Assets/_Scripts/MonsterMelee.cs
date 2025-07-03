@@ -1,27 +1,30 @@
 using Scene.Detection;
 using UnityEngine;
 using UniRx;
-using System;
-using Unity.VisualScripting;
-using static UnityEngine.EventSystems.EventTrigger;
+using Scene.UI;
+using Scene.Fight;
 
 namespace Scene.Character
 {
 	public class MonsterMelee : Character
 	{
 		[SerializeField] private float _currentDamage = 25f;
-		private Type[] _targetTypes = new Type[] { typeof(Player) };
+
+		[SerializeField] private ValueBar _healthBar;
+
+		private TargetType _preyTypes = TargetType.Player;
 		private Detector _detector;
 
 		private IdleState _idleState = new();
 		private FollowState _followState = new();
 		private MeleeAttackState _attackState = new();
-		private ITarget _currentTarget;
 
 		public override float CurrentDamage => _currentDamage;
 
 		private void Awake()
 		{
+			_healthBar.ApplyValue(Health);
+
 			_detector = GetComponent<Detector>();
 			if (_detector == null)
 			{
@@ -30,17 +33,17 @@ namespace Scene.Character
 			}
 
 			SetState(_idleState);
-			_detector.ToggleDetection(true, _targetTypes);
-			_detector.Targets.ObserveAdd().Subscribe(OnTargetAdded).AddTo(this);
-			_detector.Targets.ObserveRemove().Subscribe(OnTargetRemoved).AddTo(this);
+			_detector.ToggleDetection(true, _preyTypes);
+			//_detector.Targets.ObserveAdd().Subscribe(OnTargetAdded).AddTo(this);
+			//_detector.Targets.ObserveRemove().Subscribe(OnTargetRemoved).AddTo(this);
 
 		}
 
 		private void OnTargetRemoved(CollectionRemoveEvent<ITarget> @event)
 		{
-			if (!_detector.HasTargets && CurrentState != _idleState)
+			if (!_detector.HasTargets)
 			{
-				SetState(_idleState);
+				_currentTarget = null;
 			}
 		}
 
@@ -57,9 +60,6 @@ namespace Scene.Character
 			if (nearestTarget != _currentTarget)
 			{
 				_currentTarget = nearestTarget;
-				_followState.SetTarget(_currentTarget);
-
-				SetState(_followState);
 			}
 		}
 
@@ -67,24 +67,33 @@ namespace Scene.Character
 		{
 			base.LateUpdate();
 
-			if (CurrentState is (FollowState or IdleState) && _currentTarget != null && _detector.IsInMeleeDistance())
+			var nearest = _detector.NearestTarget;
+
+			// If target has been changed
+			if (_currentTarget != nearest)
 			{
-				_attackState.SetTarget(_currentTarget);
-				SetState(_attackState);
-			}
-			else if (_detector.NearestTarget == null)
-			{
-				SetState(_idleState);
-			}
-			else if (CurrentState is MeleeAttackState)
-			{
-				if(!_detector.IsInMeleeDistance())
+				if (nearest != null)
 				{
-					_followState.SetTarget(_currentTarget);
+					_currentTarget = nearest;
+					SetState(_followState);
+				}
+				else
+				{
+					SetState(_idleState);
+				}
+			}
+			else
+			{
+				if (_detector.IsInMeleeDistance() && CurrentState != _attackState)
+				{
+					SetState(_attackState);
+				}
+				else if (!_detector.IsInMeleeDistance() && CurrentState == _attackState)
+				{
 					SetState(_followState);
 				}
 			}
-			
+
 			CurrentState?.Update();
 		}
 	}

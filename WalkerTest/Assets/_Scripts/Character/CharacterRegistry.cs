@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
+using Scene.Fight;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace Scene.Character
 {
@@ -11,7 +9,7 @@ namespace Scene.Character
 	{
 		bool TryGetTargetByName(string targetId, out ICharacter target);
 		bool TryGetTargets(string targetId, out IEnumerable<ICharacter> targets);
-		bool TryGetTargetsInRadius(IEnumerable<Type> targetTypes, Vector3 position, float radius, out IEnumerable<ICharacter> targets);
+		bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets);
 		void RegisterTarget(ICharacter target);
 		void UnregisterTarget(ICharacter target);
 	}
@@ -29,10 +27,10 @@ namespace Scene.Character
 			}
 		}
 
-		public bool TryGetTargetsInRadius(IEnumerable<Type> targetTypes, Vector3 position, float radius, out IEnumerable<ICharacter> targets)
+		public bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets)
 		{
 			targets = _targetList.Where(t =>
-				targetTypes.Any(type => type.IsAssignableFrom(t.GetType())) &&
+				t.TargetType.HasAnyCommon(targetType) && // Use equality comparison instead of 'is' for enum types  
 				Vector3.Distance(t.Position, position) <= radius);
 
 			return targets.Any();

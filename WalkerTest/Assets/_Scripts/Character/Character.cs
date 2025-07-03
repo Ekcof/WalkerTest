@@ -1,4 +1,6 @@
 using Inventory;
+using Scene.Detection;
+using Scene.Fight;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,17 +8,14 @@ using UnityEngine;
 
 namespace Scene.Character
 {
-    public interface ICharacter
-    {
-		string ID {  get; }
+	public interface ICharacter: IShootable
+	{
+		string ID { get; }
 		string Name { get; }
 		Transform Transform { get; }
 		Vector3 Position { get; }
-
-		string Hash { get; }
-		Health Health { get; }
-        IMovement Movement { get; }
-        IInventory Inventory { get; }
+		IMovement Movement { get; }
+		IInventory Inventory { get; }
 		IState State { get; }
 		IAnimator Animator { get; }
 		float CurrentDamage { get; }
@@ -30,7 +29,10 @@ namespace Scene.Character
 		[SerializeField] private Health _health;
 		[SerializeField] private SimpleAnimator _animator;
 		[SerializeField] protected string _name;
+		[SerializeField] protected Collider2D _collider;
+		[SerializeField] protected TargetType _targetType;
 		protected IState CurrentState;
+		protected ITarget _currentTarget;
 
 		public string ID { get; private set; }
 		public string Name { get; private set; }
@@ -42,7 +44,10 @@ namespace Scene.Character
 		public IMovement Movement => _movement;
 		public IInventory Inventory => _inventory;
 		public Health Health => _health;
+		public Collider2D Collider => _collider;
 		public abstract float CurrentDamage { get; }
+
+		public TargetType TargetType => _targetType;
 
 		protected virtual void LateUpdate()
 		{
@@ -59,7 +64,14 @@ namespace Scene.Character
 			}
 
 			CurrentState = state;
-			CurrentState?.Start();
+			if (State is TargetedState targeted)
+			{
+				targeted.Start(_currentTarget);
+			}
+			else
+			{
+				CurrentState?.Start();
+			}
 		}
 	}
 }

@@ -5,19 +5,18 @@ using UnityEngine;
 using Zenject;
 using Scene.Character;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using System;
+using Scene.Fight;
 
 namespace Scene.Detection
 {
-
 	public interface IDetector
 	{
 		IReadOnlyReactiveCollection<ITarget> Targets { get; }
 		bool HasTargets { get; }
 		ITarget NearestTarget { get; }
-		void ToggleDetection(bool isActive, IEnumerable<Type> targetTypes);
+		void ToggleDetection(bool isActive, TargetType targetType);
 		bool IsInMeleeDistance();
 	}
 
@@ -56,7 +55,7 @@ namespace Scene.Detection
 			}
 		}
 
-		public void ToggleDetection(bool isActive, IEnumerable<Type> targetTypes)
+		public void ToggleDetection(bool isActive, TargetType targetType)
 		{
 			if (!isActive)
 			{
@@ -66,15 +65,15 @@ namespace Scene.Detection
 			else if (!IsDetecting)
 			{
 				_detectionCts = new();
-				StartDetection(targetTypes, _detectionCts.Token).Forget();
+				StartDetection(targetType, _detectionCts.Token).Forget();
 			}
 		}
 
-		private async UniTask StartDetection(IEnumerable<Type> targetTypes, CancellationToken token)
+		private async UniTask StartDetection(TargetType targetType, CancellationToken token)
 		{
 			while (_detectionCts != null && !token.IsCancellationRequested)
 			{
-				if (_characterRegistry.TryGetTargetsInRadius(targetTypes, transform.position, _detectionRadius, out var characters))
+				if (_characterRegistry.TryGetTargetsInRadius(targetType, transform.position, _detectionRadius, out var characters))
 				{
 					RefreshTargets(characters);
 				}
@@ -100,10 +99,8 @@ namespace Scene.Detection
 
 			for (int i = _targets.Count - 1; i >= 0; i--)
 			{
-				Debug.Log($"Check target with hash {_targets[i].Character.Hash} against current characters: {string.Join(", ", currentCharacterIds)}");
 				if (!currentCharacterIds.Contains(_targets[i].Character.Hash))
 				{
-					Debug.Log($"[SYNC] Remove target: {_targets[i].Character.Name} ({_targets[i].Character.Hash})");
 					_targets.RemoveAt(i);
 				}
 			}
@@ -112,7 +109,6 @@ namespace Scene.Detection
 			{
 				if (!_targets.Any(b => b.Character.Hash.Equals(v.Hash)))
 				{
-					Debug.Log($"[SYNC] Add target: {v.Name} ({v.Hash})");
 					_targets.Add(new Target(v));
 				}
 			}

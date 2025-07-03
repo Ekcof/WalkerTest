@@ -1,45 +1,27 @@
-using Scene.Detection;
-
 namespace Scene.Character
 {
-    public class MeleeAttackState : State
-    {
-		public ITarget Target { get; private set; }
-		private bool _isRight;
+    public class MeleeAttackState : TargetedState
+	{
+		protected override string LeftKey => "MeleeAttackLeft";
 
-		public void SetTarget(ITarget target)
-		{
-			Target = target;
-		}
+		protected override string RightKey => "MeleeAttackRight";
 
 		public override void Start()
 		{
-			SetAnimForSide();
+			_root.Movement?.Stop();
+			SetAnimationFromSide(CurrentSide, OnAnimationComplete);
 		}
 
 		public override void Update()
 		{
 			base.Update();
 
-			SetAnimForSide();
+			SetAnimation(OnAnimationComplete);
 		}
 
-		private void SetAnimForSide()
+		private void OnAnimationComplete()
 		{
-			void OnAnimationComplete()
-			{
-				Target.Character.Health?.TryApplyChange(1f);
-			}
-
-			var currentSide = Target.Character.Position.x > _root.Position.x;
-
-			if (_isRight != currentSide)
-			{
-				var animName = currentSide ?
-					"MeleeAttackRight" : "MeleeAttackLeft";
-				_root.Animator?.SetAnimation(animName, OnAnimationComplete);
-				_isRight = currentSide;
-			}
+			Target?.Character.Health.TryApplyChange(1f);
 		}
 	}
 }
