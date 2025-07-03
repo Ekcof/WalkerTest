@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Zenject;
 
 namespace Scene.Character
 {
@@ -23,6 +24,9 @@ namespace Scene.Character
 
 	public abstract class Character : MonoBehaviour, ICharacter
 	{
+		[Inject] private IShootableRegistry _shootables;
+		[Inject] private ICharacterRegistry _characters;
+
 		[SerializeField] private string _id;
 		[SerializeField] private Movement _movement;
 		[SerializeField] private MainInventory _inventory;
@@ -48,6 +52,18 @@ namespace Scene.Character
 		public abstract float CurrentDamage { get; }
 
 		public TargetType TargetType => _targetType;
+
+		protected virtual void Start()
+		{
+			_shootables.Register(this);
+			_characters.Register(this);
+		}
+
+		public void Unregister()
+		{
+			_shootables.Unregister(this);
+			_characters.UnregisterTarget(this);
+		}
 
 		protected virtual void LateUpdate()
 		{

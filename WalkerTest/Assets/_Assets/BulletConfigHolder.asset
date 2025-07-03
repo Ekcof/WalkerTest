@@ -17,5 +17,5 @@ MonoBehaviour:
     _lifeTime: 1
     _damage: 25
     _distance: 11
-    _speed: 7
+    _speed: 15
     _ignoreTypes: 01000000

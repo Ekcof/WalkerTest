@@ -10,7 +10,7 @@ namespace Scene.Character
 		bool TryGetTargetByName(string targetId, out ICharacter target);
 		bool TryGetTargets(string targetId, out IEnumerable<ICharacter> targets);
 		bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets);
-		void RegisterTarget(ICharacter target);
+		void Register(ICharacter target);
 		void UnregisterTarget(ICharacter target);
 	}
 
@@ -20,11 +20,11 @@ namespace Scene.Character
 
 		private void Awake()
 		{  
-			var charactersOnScene = FindObjectsOfType<Character>();
-			foreach (var c in charactersOnScene)
-			{
-				RegisterTarget(c);
-			}
+			//var charactersOnScene = FindObjectsOfType<Character>();
+			//foreach (var c in charactersOnScene)
+			//{
+			//	RegisterTarget(c);
+			//}
 		}
 
 		public bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets)
@@ -48,7 +48,7 @@ namespace Scene.Character
 			return targets.Count() > 0;
 		}
 
-		public void RegisterTarget(ICharacter target)
+		public void Register(ICharacter target)
 		{
 			if (!_targetList.Contains(target))
 				_targetList.Add(target);

@@ -96,17 +96,17 @@ namespace Scene.Fight
 
 				Collider2D[] results = new Collider2D[4];
 				int count = _collider.OverlapCollider(filter, results);
-
+				Debug.Log($"_____! There are {count} colliders in bullet overlap");
 				for (int i = 0; i < count; i++)
 				{
 					var other = results[i];
-
+					Debug.Log($"_____! Check the {other.name}");
 					if (other == _collider ||
 						(_shooterCollider != null && other == _shooterCollider))
 					{
 						continue;
 					}
-
+					Debug.Log($"_____! Try to get the {other.name} in registry");
 					if (_shootableRegistry.TryGetShootableByCollider(other, out var shootable))
 					{
 						shootable.Health.TryApplyChange(-_currentConfig.Damage);

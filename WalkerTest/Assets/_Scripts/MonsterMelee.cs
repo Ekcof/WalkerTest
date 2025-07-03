@@ -18,7 +18,7 @@ namespace Scene.Character
 		private IdleState _idleState = new();
 		private FollowState _followState = new();
 		private MeleeAttackState _attackState = new();
-
+		private DeadState _deadState = new();
 		public override float CurrentDamage => _currentDamage;
 
 		private void Awake()
@@ -36,7 +36,6 @@ namespace Scene.Character
 			_detector.ToggleDetection(true, _preyTypes);
 			//_detector.Targets.ObserveAdd().Subscribe(OnTargetAdded).AddTo(this);
 			//_detector.Targets.ObserveRemove().Subscribe(OnTargetRemoved).AddTo(this);
-
 		}
 
 		private void OnTargetRemoved(CollectionRemoveEvent<ITarget> @event)
@@ -66,8 +65,21 @@ namespace Scene.Character
 		protected override void LateUpdate()
 		{
 			base.LateUpdate();
+			if (CurrentState == _deadState)
+			{
+				return;
+			}	
 
 			var nearest = _detector.NearestTarget;
+
+			if (Health.CurrentValue.Value <= 0)
+			{
+				if (CurrentState != _deadState)
+				{
+					SetState(_deadState);
+				}
+				return;
+			}
 
 			// If target has been changed
 			if (_currentTarget != nearest)
