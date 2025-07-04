@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Scene.Character
 {
     public class MeleeAttackState : TargetedState
@@ -21,7 +23,10 @@ namespace Scene.Character
 
 		private void OnAnimationComplete()
 		{
-			Target?.Character.Health.TryApplyChange(1f);
+			UnityEngine.Debug.Log($"_______!Try to hit");
+			if (Target != null)
+				UnityEngine.Debug.Log($"_______! Hit {Target.Character.Name}");
+			Target?.Character.Health.TryApplyChange(-_root.CurrentDamage);
 		}
 	}
 }

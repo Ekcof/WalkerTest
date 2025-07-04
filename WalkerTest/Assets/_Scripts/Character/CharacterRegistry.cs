@@ -11,7 +11,7 @@ namespace Scene.Character
 		bool TryGetTargets(string targetId, out IEnumerable<ICharacter> targets);
 		bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets);
 		void Register(ICharacter target);
-		void UnregisterTarget(ICharacter target);
+		void Unregister(ICharacter target);
 	}
 
 	public class CharacterRegistry : MonoBehaviour, ICharacterRegistry
@@ -30,7 +30,7 @@ namespace Scene.Character
 		public bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets)
 		{
 			targets = _targetList.Where(t =>
-				t.TargetType.HasAnyCommon(targetType) && // Use equality comparison instead of 'is' for enum types  
+				t.TargetType.HasAnyCommon(targetType) &&  
 				Vector3.Distance(t.Position, position) <= radius);
 
 			return targets.Any();
@@ -54,7 +54,7 @@ namespace Scene.Character
 				_targetList.Add(target);
 		}
 
-		public void UnregisterTarget(ICharacter target)
+		public void Unregister(ICharacter target)
 		{
 			_targetList.Remove(target);
 		}

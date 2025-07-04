@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584188eaead31124fb99f7da07aa59a7, type: 3}
+  m_Name: DefaultAmmoWrapper
+  m_EditorClassIdentifier: 
+  _data:
+    _id: DefaultAmmo
+    _isStackable: 1
+    _stackLimit: 100
+    _sprite: {fileID: 1664309687, guid: 605015436f71ce94b82b2f67d8de9266, type: 3}
+    _basePrice: 1

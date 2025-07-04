@@ -81,7 +81,7 @@ namespace Scene.Character
 
 			if (onComplete != null)
 			{
-				_sequence.OnComplete(() =>
+				_sequence.OnStepComplete(() =>
 				{
 					onComplete.Invoke();
 				});

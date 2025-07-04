@@ -34,34 +34,7 @@ namespace Scene.Character
 
 			SetState(_idleState);
 			_detector.ToggleDetection(true, _preyTypes);
-			//_detector.Targets.ObserveAdd().Subscribe(OnTargetAdded).AddTo(this);
-			//_detector.Targets.ObserveRemove().Subscribe(OnTargetRemoved).AddTo(this);
 		}
-
-		private void OnTargetRemoved(CollectionRemoveEvent<ITarget> @event)
-		{
-			if (!_detector.HasTargets)
-			{
-				_currentTarget = null;
-			}
-		}
-
-		private void OnTargetAdded(CollectionAddEvent<ITarget> @event)
-		{
-			var nearestTarget = _detector.NearestTarget;
-
-			if (nearestTarget == null)
-			{
-				SetState(_idleState);
-				return;
-			}
-
-			if (nearestTarget != _currentTarget)
-			{
-				_currentTarget = nearestTarget;
-			}
-		}
-
 		protected override void LateUpdate()
 		{
 			base.LateUpdate();

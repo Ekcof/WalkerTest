@@ -1,5 +1,6 @@
 using Scene.Detection;
 using Scene.Fight;
+using Scene.UI;
 using UnityEngine;
 
 namespace Scene.Character
@@ -8,11 +9,13 @@ namespace Scene.Character
 	{
 		[SerializeField] private PlayerGun _gun;
 		[SerializeField] private Detector _detector;
+		[SerializeField] private ValueBar _healthBar;
 		public IGun Gun => _gun;
 		public override float CurrentDamage => 50f; // Melee damage
 
 		private void Awake()
 		{
+			_healthBar.ApplyValue(Health);
 			_detector.ToggleDetection(true, ~TargetType.Player);
 		}
 

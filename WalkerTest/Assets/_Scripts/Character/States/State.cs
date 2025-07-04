@@ -26,7 +26,6 @@ namespace Scene.Character
 		public abstract void Start();
 		public virtual void Update()
 		{
-			// Default implementation can be empty or contain common update logic
 		}
 
 		public virtual void Stop()

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Configs Installer
   m_EditorClassIdentifier: 
   _bulletConfigHolder: {fileID: 11400000, guid: 5b7a580e0d793a845a2089a959a72722, type: 2}
+  _itemConfigHolder: {fileID: 11400000, guid: 45aaae8a78128f949842af6648c7e458, type: 2}

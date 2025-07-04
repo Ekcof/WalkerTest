@@ -11,15 +11,18 @@ public class Health : MonoBehaviour, IValueObserver
 
 	public IReadOnlyReactiveProperty<float> CurrentValue => _currentHealth;
 
-	public void TryApplyChange(float amount)
+	public bool TryApplyChange(float amount)
 	{
 		if (_currentHealth.Value > 0)
 		{
+			if (_currentHealth.Value >= _maxHealth && amount > 0)
+			{
+				return false; 
+			}
 			_currentHealth.Value += amount;
+			return true;
 		}
-		Debug.Log($"____Try apply {amount} change {CurrentValue}");
-
-		//throw new System.NotImplementedException();
+		return false;
 	}
 
 	public void Refresh()

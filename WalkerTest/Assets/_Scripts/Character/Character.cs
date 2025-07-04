@@ -20,6 +20,7 @@ namespace Scene.Character
 		IState State { get; }
 		IAnimator Animator { get; }
 		float CurrentDamage { get; }
+		void Refresh();
 	}
 
 	public abstract class Character : MonoBehaviour, ICharacter
@@ -55,6 +56,17 @@ namespace Scene.Character
 
 		protected virtual void Start()
 		{
+			Refresh();
+		}
+
+		public virtual void Refresh()
+		{
+			_collider.enabled = true;
+			Register();
+		}
+
+		protected virtual void Register()
+		{
 			_shootables.Register(this);
 			_characters.Register(this);
 		}
@@ -62,7 +74,7 @@ namespace Scene.Character
 		public void Unregister()
 		{
 			_shootables.Unregister(this);
-			_characters.UnregisterTarget(this);
+			_characters.Unregister(this);
 		}
 
 		protected virtual void LateUpdate()
