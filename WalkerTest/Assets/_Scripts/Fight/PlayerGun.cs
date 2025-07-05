@@ -1,6 +1,8 @@
+using Inventory;
 using Scene.Character;
 using System.Collections;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -8,16 +10,21 @@ namespace Scene.Fight
 {
 	public class PlayerGun : MonoBehaviour, IGun
 	{
+		private const string DEFAULT_AMMO_TYPE = "DefaultAmmo";
+
 		[Inject] private IBulletRegistry _bulletRegistry;
 		[Inject] private IBulletConfigHolder _bulletConfigHolder;
+		[Inject] private IPlayerLog _log;
 
 		[Inject] private Player _player;
 		[SerializeField] private int _ammo;
 		private IBulletConfig _currentConfig;
+		private IInventory Inventory => _player.Inventory;
 		public int Ammo => _ammo;
 		public IBulletConfig CurrentConfig => _currentConfig;
 
-		public Vector2 MuzzlePosition => transform.position; // TODO: Add point for muzzle
+		public Vector2 MuzzlePosition => transform.position; // TODO: Add point for muzzlepartial
+		
 
 		private void Awake()
 		{
@@ -31,7 +38,14 @@ namespace Scene.Fight
 
 		public void Shoot(IGunner gunner, Vector2 position)
 		{
-			_bulletRegistry.Shoot(gunner, position);
+			if (Inventory.TryRemoveItem(DEFAULT_AMMO_TYPE, 1))
+			{
+				_bulletRegistry.Shoot(gunner, position);
+			}
+			else
+			{
+				_log.AddMessage("Out of ammo!");
+			}
 		}
 	}
 }

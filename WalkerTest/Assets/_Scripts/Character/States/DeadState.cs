@@ -10,7 +10,7 @@ namespace Scene.Character
 		{
 			_root.Movement.Stop();
 			_root.Collider.enabled = true;
-			_root.Animator.SetAnimation("Die");
+			_root.Animator.SetAnimation("Die", _root.DropLoot);
 		}
     }
 }

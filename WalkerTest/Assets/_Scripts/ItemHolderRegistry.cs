@@ -1,36 +1,73 @@
+using ComponentUtils;
 using Scene.Character;
 using Scene.Fight;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.WSA;
+using Zenject;
 
 namespace Inventory
 {
     public interface IItemHolderRegistry
     {
-		void Register(IItemHolder target);
-		void Unregister(IItemHolder target);
-		bool TryGetTargetsInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets);
+		void Register(ItemHolder holder);
+		void Unregister(ItemHolder holder);
+		void Unregister(IItemHolder holder);
+		void Create(IEnumerable<IItem> items, Vector2 position);
+		bool TryGetHoldersInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets);
 	}
 
 
 	public class ItemHolderRegistry : MonoBehaviour, IItemHolderRegistry
 	{
+		[Inject] private IItemConfigHolder _configs;
+		[Inject] private DiContainer _diContainer;
+
+		[SerializeField] private List<IItemHolder> _activeHolders = new();
+		[SerializeField] private ItemHolder _prefab;
+		private Pool<ItemHolder> _pool;
+
 		private List<IItemHolder> _itemHolders = new();
-
-		public void Register(IItemHolder target)
+		private void Awake()
 		{
-			throw new System.NotImplementedException();
+			_pool = new(_prefab, transform, _diContainer);
 		}
 
-		public bool TryGetTargetsInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets)
+		public void Create(IEnumerable<IItem> items, Vector2 position)
 		{
-			throw new System.NotImplementedException();
+			var holder = _pool.Pop();
+			holder.transform.position = position;
+			holder.AddItems(items);
+			Register(holder);
 		}
 
-		public void Unregister(IItemHolder target)
+		public void Register(ItemHolder holder)
 		{
-			throw new System.NotImplementedException();
+			holder.SetActive(true);
+			_activeHolders.Add(holder);
+			_itemHolders.Add(holder);
+		}
+
+		public bool TryGetHoldersInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets)
+		{
+			targets = _itemHolders.Where(t =>
+				Vector3.Distance(t.Position, position) <= radius);
+
+			return targets.Any();
+		}
+
+		public void Unregister(ItemHolder holder)
+		{
+			holder.SetActive(false);
+			_itemHolders.Remove(holder);
+			_pool.Push(holder);
+		}
+
+		public void Unregister(IItemHolder holder)
+		{
+			Unregister((ItemHolder) holder);
 		}
 	}
 }

@@ -306,6 +306,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90bcd4c42d1d0b24f8e99453fc75edb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemsToAdd:
+  - Id: DefaultAmmo
+    Amount: 4
 --- !u!114 &4541890834660623996
 MonoBehaviour:
   m_ObjectHideFlags: 0

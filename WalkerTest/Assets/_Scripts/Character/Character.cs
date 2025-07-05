@@ -20,6 +20,8 @@ namespace Scene.Character
 		IState State { get; }
 		IAnimator Animator { get; }
 		float CurrentDamage { get; }
+
+		void DropLoot();
 		void Refresh();
 	}
 
@@ -27,6 +29,7 @@ namespace Scene.Character
 	{
 		[Inject] private IShootableRegistry _shootables;
 		[Inject] private ICharacterRegistry _characters;
+		[Inject] private IItemHolderRegistry _itemHolders;
 
 		[SerializeField] private string _id;
 		[SerializeField] private Movement _movement;
@@ -100,6 +103,11 @@ namespace Scene.Character
 			{
 				CurrentState?.Start();
 			}
+		}
+
+		public void DropLoot()
+		{
+			_itemHolders.Create(Inventory.AllItems, transform.position);
 		}
 	}
 }
