@@ -45,7 +45,7 @@ namespace Scene.Character
 
 			var nearest = _detector.NearestTarget;
 
-			if (Health.CurrentValue.Value <= 0)
+			if (Health.Current.Value <= 0)
 			{
 				if (CurrentState != _deadState)
 				{
@@ -62,7 +62,7 @@ namespace Scene.Character
 					_currentTarget = nearest;
 					SetState(_followState);
 				}
-				else
+				else if (CurrentState != _idleState)
 				{
 					SetState(_idleState);
 				}

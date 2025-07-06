@@ -6,13 +6,12 @@ namespace Scene.Character
 {
     public class ShootingState : TargetedState
     {
-		protected override string LeftKey => "MoveLeft";
+		protected override string LeftKey => "ShootLeft";
 
-		protected override string RightKey => "MoveRight";
+		protected override string RightKey => "ShootRight";
 
 		public override void Start()
 		{
-			_root.Movement.Follow(Target.Transform);
 			SetAnimationFromSide(CurrentSide);
 		}
 

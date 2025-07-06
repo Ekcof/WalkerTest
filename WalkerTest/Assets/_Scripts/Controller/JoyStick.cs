@@ -5,7 +5,7 @@ using UniRx;
 using Zenject;
 using Scene.Character;
 
-namespace Controller
+namespace UI.Controls
 {
 	public interface IJoyStick
 	{
@@ -78,8 +78,6 @@ namespace Controller
 					_inputDirection.Value = newDirection;
 					OnDirectionChanged?.Invoke(_inputDirection.Value);
 				}
-
-				//Debug.Log($"Joystick Direction: {_inputDirection}");
 			}
 		}
 

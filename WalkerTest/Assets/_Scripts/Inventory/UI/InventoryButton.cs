@@ -1,30 +1,30 @@
 using Inventory;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryButton : MonoBehaviour
+namespace UI.Controls
 {
-
-    [SerializeField] private InventoryPopup _popup;
-    [SerializeField] private Button _button;
-
-	void Start()
-    {
-        _button.SetListener(OnPressButton);
-    }
-
-	private void OnPressButton()
+	public class InventoryButton : MonoBehaviour
 	{
-		if (_popup.IsOpen)
+
+		[SerializeField] private InventoryPopup _popup;
+		[SerializeField] private Button _button;
+
+		void Start()
 		{
-			_popup.Close();
+			_button.SetListener(OnPressButton);
 		}
-		else
+
+		private void OnPressButton()
 		{
-			_popup.Open();
+			if (_popup.IsOpen)
+			{
+				_popup.Close();
+			}
+			else
+			{
+				_popup.Open();
+			}
 		}
 	}
 }

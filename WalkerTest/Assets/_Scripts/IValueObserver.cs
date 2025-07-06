@@ -3,7 +3,7 @@ using UniRx;
 public interface IValueObserver
 {
 	float MaxValue { get; }
-	IReadOnlyReactiveProperty<float> CurrentValue { get; }
+	IReadOnlyReactiveProperty<float> Current { get; }
 	bool TryApplyChange(float amount);
 	void Refresh();
 	void UpdateMaxValue(float amount);

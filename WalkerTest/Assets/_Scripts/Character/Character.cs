@@ -55,7 +55,7 @@ namespace Scene.Character
 		public Health Health => _health;
 		public Collider2D Collider => _collider;
 		public abstract float CurrentDamage { get; }
-		public bool IsDead => Health.CurrentValue.Value <= 0;
+		public bool IsDead => Health.Current.Value <= 0;
 		public TargetType TargetType => _targetType;
 
 		protected virtual void Start()

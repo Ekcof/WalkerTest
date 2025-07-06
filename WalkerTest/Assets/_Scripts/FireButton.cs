@@ -3,18 +3,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class FireButton : MonoBehaviour
+namespace UI.Controls
 {
-	[Inject] private Player _player;
- 	[SerializeField] private Button _button;
-
-	private void Awake()
+	public class FireButton : MonoBehaviour
 	{
-		_button.SetListener(OnFireButtonClicked);
-	}
+		[Inject] private Player _player;
+		[SerializeField] private Button _button;
 
-	private void OnFireButtonClicked()
-	{
-		_player.TryToShoot();
+		private void Awake()
+		{
+			_button.SetListener(OnFireButtonClicked);
+		}
+
+		private void OnFireButtonClicked()
+		{
+			_player.TryToShoot();
+		}
 	}
 }

@@ -1,4 +1,4 @@
-using Controller;
+using UI.Controls;
 using Scene.Character;
 using UniRx;
 using UnityEngine;

@@ -9,7 +9,7 @@ public class Health : MonoBehaviour, IValueObserver
 
 	public float MaxValue => _maxHealth;
 
-	public IReadOnlyReactiveProperty<float> CurrentValue => _currentHealth;
+	public IReadOnlyReactiveProperty<float> Current => _currentHealth;
 
 	public bool TryApplyChange(float amount)
 	{

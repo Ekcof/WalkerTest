@@ -31,7 +31,7 @@ namespace Scene.UI
 		public void ApplyValue(IValueObserver valueObserver)
 		{
 			_maxValue = valueObserver.MaxValue;
-			valueObserver.CurrentValue.Subscribe(OnChangeValue).AddTo(this);
+			valueObserver.Current.Subscribe(OnChangeValue).AddTo(this);
 		}
 
 		private void OnChangeValue(float obj)

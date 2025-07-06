@@ -1,3 +1,4 @@
+using Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace Inventory
 		/// </summary>
 		/// <param name="item"></param>
 		void RemoveItem(IItem item);
+		
+		void SetItems(IEnumerable<SerializedItem> items);
 	}
 
 	public class MainInventory : MonoBehaviour, IInventory
@@ -161,6 +164,27 @@ namespace Inventory
 			}
 
 			return true;
+		}
+
+		public void SetItems(IEnumerable<SerializedItem> items)
+		{
+			_items.Clear();
+			foreach (var serializedItem in items)
+			{
+				var itemConfig = _itemConfigHolder.GetItemConfigById(serializedItem.Id);
+				if (itemConfig != null)
+				{
+					var item = itemConfig.GetCopy(_diContainer, serializedItem.Amount);
+					if (item != null)
+					{
+						_items.Add(item);
+					}
+				}
+				else
+				{
+					Debug.LogWarning($"Item config for ID {serializedItem.Id} not found.");
+				}
+			}
 		}
 	}
 }
