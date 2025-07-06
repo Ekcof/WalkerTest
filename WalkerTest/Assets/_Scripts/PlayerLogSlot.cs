@@ -7,7 +7,7 @@ namespace UI
 {
 	public interface IPlayerLogSlot
 	{
-		void Show(string message, Action onComplete);
+		void Show(string message, Action onComplete, Color color = default);
 		void Hide(Action onComplete);
 	}
 
@@ -24,11 +24,11 @@ namespace UI
 
 		private Tween _tween;
 
-		public void Show(string message, Action onComplete)
+		public void Show(string message, Action onComplete, Color color = default)
 		{
 			// Move to bottom in hierarchy (UI order)
 			_text.text = message;
-
+			_text.color = color == default ? Color.white : color;
 			// Kill any previous animations
 			_tween?.Kill();
 			gameObject.SetActive(true);

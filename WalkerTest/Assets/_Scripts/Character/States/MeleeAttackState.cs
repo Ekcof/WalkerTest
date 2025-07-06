@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Scene.Character
 {
     public class MeleeAttackState : TargetedState

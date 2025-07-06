@@ -12,6 +12,7 @@ public enum LookType
 
 public interface IMovement
 {
+	Vector2 CurrentDirection { get; }
 	void Move(Vector2 position, LookType lookType = LookType.None);
 	void Follow(Transform target, LookType lookType = LookType.None);
 	void ApplyMovement(Vector2 dir);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.EventSystems;
 
 public enum SimpleFollowMode
 {
@@ -45,6 +46,8 @@ public class SimpleFollower : MonoBehaviour, IMovement
 			}
 		}
 	}
+
+	public Vector2 CurrentDirection => _velocity.normalized;
 
 	private void Start()
 	{

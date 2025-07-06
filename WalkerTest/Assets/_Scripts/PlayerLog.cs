@@ -1,6 +1,7 @@
 using ComponentUtils;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,7 +10,7 @@ namespace UI
 {
 	public interface IPlayerLog
 	{
-		void AddMessage(string message);
+		void AddMessage(string message, Color color = default);
 		void ClearLog();
 	}
 
@@ -27,14 +28,15 @@ namespace UI
 			_pool = new(_slotPrefab, transform, _diContainer);
 		}
 
-		public void AddMessage(string message)
+		public void AddMessage(string message, Color color = default)
 		{
 			if (_slots.Count > _logsLimit)
 			{
 				HideLastSlot();
 			}
+			
 			var slot = _pool.Pop();
-			slot.Show(message, HideLastSlot);
+			slot.Show(message, HideLastSlot, color);
 			_slots.Enqueue(slot);
 			//LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
 		}

@@ -15,6 +15,7 @@ namespace Inventory
 		void Register(ItemHolder holder);
 		void Unregister(ItemHolder holder);
 		void Unregister(IItemHolder holder);
+		bool HasItemHolder(IItemHolder holder);
 		void Create(IEnumerable<IItem> items, Vector2 position);
 		bool TryGetHoldersInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets);
 	}
@@ -48,6 +49,11 @@ namespace Inventory
 			holder.SetActive(true);
 			_activeHolders.Add(holder);
 			_itemHolders.Add(holder);
+		}
+
+		public bool HasItemHolder(IItemHolder itemHolder)
+		{
+			return _itemHolders.Contains(itemHolder);
 		}
 
 		public bool TryGetHoldersInRadius(Vector3 position, float radius, out IEnumerable<IItemHolder> targets)

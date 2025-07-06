@@ -10,7 +10,8 @@ namespace Scene.Character
 		protected abstract string RightKey { get; }
 		public ITarget Target { get; private set; }
 
-		public bool CurrentSide => Target.Character.Position.x > _root.Position.x;
+		public bool CurrentSide => Target != null ? Target.Character.Position.x > _root.Position.x
+			: _root.Movement.CurrentDirection.x >= 0;
 
 		public void Start(ITarget target)
 		{
@@ -20,7 +21,9 @@ namespace Scene.Character
 
 		protected virtual void SetAnimation(Action onComplete = null)
 		{
-			var currentSide = Target.Character.Position.x > _root.Position.x;
+
+			var currentSide = Target == null ? _root.Movement.CurrentDirection.x > 0 :
+				Target.Character.Position.x > _root.Position.x;
 
 			if (IsRight != currentSide)
 			{

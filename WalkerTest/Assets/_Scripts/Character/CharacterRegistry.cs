@@ -29,9 +29,10 @@ namespace Scene.Character
 
 		public bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets)
 		{
-			targets = _targetList.Where(t =>
+			targets = _targetList.Where(t => 
 				t.TargetType.HasAnyCommon(targetType) &&  
-				Vector3.Distance(t.Position, position) <= radius);
+				Vector3.Distance(t.Position, position) <= radius &&
+				!t.IsDead);
 
 			return targets.Any();
 		}

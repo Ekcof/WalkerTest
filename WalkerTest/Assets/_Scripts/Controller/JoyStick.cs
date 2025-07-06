@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 using UniRx;
+using Zenject;
+using Scene.Character;
 
 namespace Controller
 {
@@ -14,6 +16,7 @@ namespace Controller
 
 	public class JoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IJoyStick
 	{
+		[Inject] private Player _player;
 		[SerializeField] private RectTransform _main;
 		[SerializeField] private RectTransform _handle;
 
@@ -32,7 +35,11 @@ namespace Controller
 
 		public void OnPointerDown(PointerEventData eventData)
 		{
-			if (_activePointerId != -1) return;
+			if (_player.IsDead)
+				return;
+
+			if (_activePointerId != -1)
+				return;
 
 			if (RectTransformUtility.RectangleContainsScreenPoint(_main, eventData.position, eventData.pressEventCamera))
 			{

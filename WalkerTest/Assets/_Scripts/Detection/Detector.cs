@@ -114,7 +114,7 @@ namespace Scene.Detection
 				}
 
 				if (_isDetectingItemHolders
-					&& _itemHolderRegistry.TryGetHoldersInRadius(transform.position, _detectionRadius, out var items))
+					&& _itemHolderRegistry.TryGetHoldersInRadius(transform.position, _closeRadius, out var items))
 				{
 					RefreshItemHolders(items);
 				}

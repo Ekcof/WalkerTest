@@ -34,7 +34,6 @@ namespace Scene.Fight
 
 		public bool TryGetShootableByCollider(Collider2D collider, out IShootable shootable)
 		{
-			Debug.Log($"_____! There are {_shootables.Count} shootables in registry");
 			shootable = _shootables.FirstOrDefault(s => s.Collider == collider);
 			return shootable != null;
 		}

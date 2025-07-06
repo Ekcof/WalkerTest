@@ -90,7 +90,6 @@ namespace Inventory
 
 		private void OnChangeItem(Pair<IItem> pair)
 		{
-			Debug.Log($"____On Change intem {pair.Current?.Id} {pair.Previous?.Id}");
 			var prev = pair.Previous;
 			if (prev != null && pair.Current == null)
 			{

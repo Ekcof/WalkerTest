@@ -40,7 +40,9 @@ namespace Scene.Fight
 		public void Shoot(IGunner gunner, Vector2 position)
 		{
 			var bullet = _bulletPool.Pop();
-			bullet.transform.position = gunner.Collider.transform.position;
+			var firePosition = position.x > gunner.Collider.transform.position.x ?
+				gunner.RightPosition : gunner.LeftPosition;
+			bullet.transform.position = firePosition;
 			bullet.ApplyConfig(gunner.Gun.CurrentConfig).
 				SetShooter(gunner).
 				FireAtPosition(position);

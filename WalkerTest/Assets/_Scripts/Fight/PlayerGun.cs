@@ -23,9 +23,6 @@ namespace Scene.Fight
 		public int Ammo => _ammo;
 		public IBulletConfig CurrentConfig => _currentConfig;
 
-		public Vector2 MuzzlePosition => transform.position; // TODO: Add point for muzzlepartial
-		
-
 		private void Awake()
 		{
 			_currentConfig = _bulletConfigHolder.GetConfigById("Bullet");

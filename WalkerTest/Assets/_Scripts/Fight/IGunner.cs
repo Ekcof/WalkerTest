@@ -8,6 +8,8 @@ namespace Scene.Fight
 {
     public interface IGunner
     {
+		Vector2 LeftPosition { get; }
+		Vector2 RightPosition { get; }
 		Collider2D Collider  { get; }
 		IGun Gun { get; }
 	}
