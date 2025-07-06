@@ -19,9 +19,7 @@ namespace UniRx
     {
         T Value { get; }
         bool HasValue { get; }
-
-		object Subscribe(object onHealthChanged);
-	}
+    }
 
     public interface IReactiveProperty<T> : IReadOnlyReactiveProperty<T>
     {

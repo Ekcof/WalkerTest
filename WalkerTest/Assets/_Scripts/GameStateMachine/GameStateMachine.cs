@@ -58,6 +58,7 @@ namespace Gamestates
 			if (state != null)
 			{
 				_currentState.Value = state;
+				state?.Start();
 			}
 
 			return state != null;

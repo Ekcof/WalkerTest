@@ -130,7 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d5bee5de43c3c74cb483c66773f8eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 6139210977601549400}
+  _renderer: {fileID: 6139210976193255289}
+  _defaultSprite: {fileID: -330849279, guid: de45b26d877d0ec43b0abb19f7627cb3, type: 3}
   _itemsToAdd: []
 --- !u!114 &6139210977601549400
 MonoBehaviour:

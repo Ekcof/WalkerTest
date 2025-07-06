@@ -25,6 +25,11 @@ public class Health : MonoBehaviour, IValueObserver
 		return false;
 	}
 
+	public void SetValue(float value)
+	{
+		_currentHealth.Value = Mathf.Clamp(value,0,MaxValue);
+	}
+
 	public void Refresh()
 	{
 		_currentHealth.Value = MaxValue;

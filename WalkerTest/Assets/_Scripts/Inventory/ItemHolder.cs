@@ -13,18 +13,18 @@ namespace Inventory
 		void AddItem(IItem item);
 		void AddItems(IEnumerable<IItem> items);
 		void RemoveItem(IItem item);
-		void Clear();
 		void Refresh();
 	}
 
 
 	public class ItemHolder : MonoBehaviour, IItemHolder
 	{
+		[Inject] private IItemHolderRegistry _itemHolderRegistry;
 		[Inject] private IItemConfigHolder _itemConfigHolder;
 		[Inject] private DiContainer _diContainer;
 
-		[SerializeField] private SimpleAnimator _animator;
-
+		[SerializeField] private SpriteRenderer _renderer;
+		[SerializeField] private Sprite _defaultSprite;
 		[SerializeField] private List<ItemToAdd> _itemsToAdd;
 
 		private List<IItem> _items = new();
@@ -43,12 +43,13 @@ namespace Inventory
 					AddItem(item);
 				}
 			}
+			if (_itemHolderRegistry != null)
+				_itemHolderRegistry.Register(this);
 		}
 
 		public void AddItem(IItem item)
 		{
 			_items.Add(item);
-
 		}
 
 		public void AddItems(IEnumerable<IItem> items)
@@ -59,19 +60,18 @@ namespace Inventory
 			}
 		}
 
-		public void Clear()
-		{
-			_items.Clear();
-		}
-
 		public void RemoveItem(IItem item)
 		{
-		
+			if (_items.Contains(item))
+			{
+				_items.Remove(item);
+			}
 		}
-		
+
 		public void Refresh()
 		{
-			Clear();
+			_renderer.sprite = _defaultSprite;
+			_items.Clear();
 		}
 	}
 

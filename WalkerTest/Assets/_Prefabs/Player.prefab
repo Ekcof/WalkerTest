@@ -548,6 +548,7 @@ MonoBehaviour:
   _name: 
   _collider: {fileID: 7436284023850688365}
   _targetType: 1
+  CanDropLoot: 0
   _gun: {fileID: 7436284023492832531}
   _detector: {fileID: 7436284023813581892}
   _healthBar: {fileID: 7436284023701222203}

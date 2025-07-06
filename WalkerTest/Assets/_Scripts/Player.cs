@@ -8,6 +8,7 @@ using UI;
 using UnityEngine;
 using Zenject;
 using static UnityEditor.Experimental.GraphView.GraphView;
+using static UnityEditor.Progress;
 
 namespace Scene.Character
 {
@@ -31,7 +32,6 @@ namespace Scene.Character
 		private ShootingState _shootingState = new();
 		private PlayerMoveState _moveState = new();
 		private DeadState _deadState = new();
-
 
 		private float _lastShotTime;
 
@@ -142,6 +142,12 @@ namespace Scene.Character
 			CurrentState?.Update();
 		}
 
+		public void Respawn()
+		{
+			Health.Refresh();
+			SetState(_idleState);
+		}
+
 
 		public void Deserialize(PlayerSerializationData data)
 		{
@@ -150,9 +156,13 @@ namespace Scene.Character
 				Debug.LogError("Data is null");
 				return;
 			}
+
 			_experience = data.Experience;
 			Inventory.SetItems(data.Items);
-			_healthBar.ApplyValue(Health);
+			if (data.Health > 0)
+			{
+				Health.SetValue(data.Health);
+			}
 		}
 
 		public PlayerSerializationData Serialize()

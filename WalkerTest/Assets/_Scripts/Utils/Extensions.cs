@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Scene.Fight;
 using UnityEngine.UIElements;
+using DG.Tweening;
 
 public static class Extensions
 {
@@ -222,5 +223,73 @@ public static class Extensions
 			return unityObject == null;
 
 		return instance == null;
+	}
+
+	public static T GetRandomElement<T>(this IEnumerable<T> source, bool throwException = true)
+	{
+		if (source == null || !source.Any())
+		{
+			if (throwException)
+			{
+				throw new InvalidOperationException("Cannot select a random element from an empty or null collection.");
+			}
+
+			return default;
+		}
+
+		var random = new System.Random();
+
+		var index = random.Next(0, source.Count());
+		return source.ElementAt(index);
+	}
+
+	/// <summary>
+	/// Анимирует появление target из положения 3D-объекта (Transform), разворачиваясь до финального положения.
+	/// </summary>
+	/// <param name="target">RectTransform окна</param>
+	/// <param name="sourceWorldTransform">Transform объекта на сцене, из которого "выезжает" окно</param>
+	/// <param name="camera">Камера, в которой виден объект. Если null — Camera.main</param>
+	/// <param name="duration">Время анимации</param>
+	/// <param name="easing">Тип easing</param>
+	public static void AnimateExpandFromWorld(
+		this RectTransform target,
+		Transform sourceWorldTransform,
+		Camera camera = null,
+		float duration = 0.35f,
+		Ease easing = Ease.OutCubic)
+	{
+		camera ??= Camera.main;
+
+		// 1. Получаем позицию объекта на экране
+		Vector3 screenPos = camera.WorldToScreenPoint(sourceWorldTransform.position);
+
+		// 2. Переводим экранную позицию в локальные координаты канваса
+		Canvas targetCanvas = target.GetComponentInParent<Canvas>();
+		RectTransform canvasRect = targetCanvas.GetComponent<RectTransform>();
+		RectTransformUtility.ScreenPointToLocalPointInRectangle(
+			canvasRect,
+			screenPos,
+			targetCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : targetCanvas.worldCamera,
+			out Vector2 localPoint);
+
+		// 3. Сохраняем финальную позицию
+		Vector3 finalPosition = target.anchoredPosition3D;
+
+		// 4. Устанавливаем стартовую позицию и scale
+		target.anchoredPosition3D = localPoint;
+		target.localScale = Vector3.zero;
+		target.gameObject.SetActive(true);
+
+		// 5. Анимируем
+		Sequence seq = DOTween.Sequence();
+		seq.Join(target.DOScale(1f, duration).SetEase(easing));
+		seq.Join(target.DOAnchorPos3D(finalPosition, duration).SetEase(easing));
+		// (опционально) альфа
+		var cg = target.GetComponent<CanvasGroup>();
+		if (cg != null)
+		{
+			cg.alpha = 0f;
+			seq.Join(cg.DOFade(1f, duration * 0.6f));
+		}
 	}
 }

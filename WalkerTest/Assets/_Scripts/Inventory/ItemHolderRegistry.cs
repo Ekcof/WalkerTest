@@ -23,10 +23,8 @@ namespace Inventory
 
 	public class ItemHolderRegistry : MonoBehaviour, IItemHolderRegistry
 	{
-		[Inject] private IItemConfigHolder _configs;
 		[Inject] private DiContainer _diContainer;
 
-		[SerializeField] private List<IItemHolder> _activeHolders = new();
 		[SerializeField] private ItemHolder _prefab;
 		private Pool<ItemHolder> _pool;
 
@@ -40,14 +38,19 @@ namespace Inventory
 		{
 			var holder = _pool.Pop();
 			holder.transform.position = position;
+			holder.Refresh();
 			holder.AddItems(items);
 			Register(holder);
 		}
 
 		public void Register(ItemHolder holder)
 		{
+			if (_itemHolders.Contains(holder))
+			{
+				return;
+			}
+
 			holder.SetActive(true);
-			_activeHolders.Add(holder);
 			_itemHolders.Add(holder);
 		}
 

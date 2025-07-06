@@ -8,64 +8,48 @@ using Zenject;
 
 namespace Inventory
 {
-	[Serializable]
-	public class ItemToAdd
-	{
-		public string Id;
-		public int Amount;
-	}
-	public interface IInventory
-	{
-		IEnumerable<IItem> AllItems { get; }
-		IEnumerable<IInventory> NestedInventories { get; }
-		bool TryGetItem(string id, out IItem item);
-		void AddItems(IEnumerable<IItem> items);
-		bool TryAddItem(IItem item);
-		/// <summary>
-		/// Try to remove certain amount of item from inventory (good for stackable items).
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="amount"></param>
-		/// <returns></returns>
-		bool TryRemoveItem(string id, int amount);
-		/// <summary>
-		/// Remove certain item from inventory (good for unstackable items).
-		/// </summary>
-		/// <param name="item"></param>
-		void RemoveItem(IItem item);
-		
-		void SetItems(IEnumerable<SerializedItem> items);
-	}
-
 	public class MainInventory : MonoBehaviour, IInventory
 	{
 		[Inject] private DiContainer _diContainer;
 		[Inject] private IItemConfigHolder _itemConfigHolder;
 
 		[SerializeField] private List<ItemToAdd> _itemsToAdd;
+		private bool _hasDeserializedItems;
 
-
-		private List<IItem> _items = new();
-		public IEnumerable<IItem> AllItems => _items;
+		protected List<IItem> InternalItems = new();
+		public IEnumerable<IItem> AllItems => InternalItems;
 
 		public IEnumerable<IInventory> NestedInventories => throw new System.NotImplementedException();
 
 
-		private void Awake()
+		protected virtual void Awake()
 		{
-			foreach (var itemToAdd in _itemsToAdd)
+			if (!_hasDeserializedItems)
+			{
+				AddItems(_itemsToAdd);
+			}
+		}
+
+		protected void AddItems(IEnumerable<ItemToAdd> itemsToAdd)
+		{
+			Debug.Log($"Add items {itemsToAdd.Count()}");
+			foreach (var itemToAdd in itemsToAdd)
 			{
 				var item = _itemConfigHolder.GetItemConfigById(itemToAdd.Id)?.GetCopy(_diContainer, itemToAdd.Amount);
-
 				if (item != null)
 				{
 					TryAddItem(item);
+				}
+				else
+				{
+					Debug.LogWarning($"Item config for ID {itemToAdd.Id} not found.");
 				}
 			}
 		}
 
 		public void AddItems(IEnumerable<IItem> items)
 		{
+			Debug.Log($"Add items {items.Count()}");
 			foreach (var item in items)
 			{
 				TryAddItem(item);
@@ -83,12 +67,12 @@ namespace Inventory
 			// add non stackable item
 			if (!item.IsStackable)
 			{
-				_items.Add(item);
+				InternalItems.Add(item);
 				return true;
 			}
 
 			int remainingAmount = item.Amount;
-			List<IItem> sameItems = _items.FindAll(i => i.Id == item.Id && i.Amount < i.StackLimit);
+			List<IItem> sameItems = InternalItems.FindAll(i => i.Id == item.Id && i.Amount < i.StackLimit);
 
 			if (item.IsStackable && item.Amount == 0)
 			{
@@ -110,7 +94,7 @@ namespace Inventory
 			{
 				int amountToAdd = Mathf.Min(item.StackLimit, remainingAmount);
 				IItem newItem = item.Copy(_diContainer, amountToAdd);
-				_items.Add(newItem);
+				InternalItems.Add(newItem);
 				remainingAmount -= amountToAdd;
 			}
 
@@ -124,7 +108,7 @@ namespace Inventory
 
 		public void RemoveItem(IItem item)
 		{
-			_items.Remove(item);
+			InternalItems.Remove(item);
 		}
 
 		public bool TryRemoveItem(string id, int amount)
@@ -133,7 +117,7 @@ namespace Inventory
 				return false;
 
 			// Find all stacks of this type by id
-			var stacks = _items
+			var stacks = InternalItems
 				.Where(i => i.Id == id)
 				.OrderBy(i => i.Amount) // small stacks first
 				.ToList();
@@ -154,7 +138,7 @@ namespace Inventory
 				if (stack.Amount <= amountToRemove)
 				{
 					amountToRemove -= stack.Amount;
-					_items.Remove(stack); // remove the whole stack
+					InternalItems.Remove(stack); // remove the whole stack
 				}
 				else
 				{
@@ -168,7 +152,8 @@ namespace Inventory
 
 		public void SetItems(IEnumerable<SerializedItem> items)
 		{
-			_items.Clear();
+			InternalItems.Clear();
+			_hasDeserializedItems = true;
 			foreach (var serializedItem in items)
 			{
 				var itemConfig = _itemConfigHolder.GetItemConfigById(serializedItem.Id);
@@ -177,7 +162,7 @@ namespace Inventory
 					var item = itemConfig.GetCopy(_diContainer, serializedItem.Amount);
 					if (item != null)
 					{
-						_items.Add(item);
+						InternalItems.Add(item);
 					}
 				}
 				else

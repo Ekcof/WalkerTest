@@ -3,6 +3,7 @@ using Scene.Detection;
 using Scene.Fight;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
@@ -40,6 +41,8 @@ namespace Scene.Character
 		[SerializeField] protected string _name;
 		[SerializeField] protected Collider2D _collider;
 		[SerializeField] protected TargetType _targetType;
+		[SerializeField] protected bool CanDropLoot = true;
+
 		protected IState CurrentState;
 		protected ITarget _currentTarget;
 
@@ -108,6 +111,11 @@ namespace Scene.Character
 
 		public void DropLoot()
 		{
+			if (!CanDropLoot || Inventory.AllItems.Count() == 0)
+			{
+				return;
+			}
+
 			_itemHolders.Create(Inventory.AllItems, transform.position);
 		}
 	}

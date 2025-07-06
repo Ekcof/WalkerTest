@@ -13,7 +13,7 @@ namespace Serialization
 	{
 		UniTask<bool> TryToLoadAsync(CancellationToken token);
 		UniTask<bool> TryToSaveAsync(CancellationToken token);
-		void DeleteProgress();
+		UniTask DeleteProgress();
 	}
 
 	public class SerializationManager : ISerializationManager
@@ -25,13 +25,14 @@ namespace Serialization
 		public async UniTask<bool> TryToSaveAsync(CancellationToken token)
 		{
 			var save = _player.Serialize();
+			var path = SavePath; // ѕолучаем путь на главном потоке!
 
 			try
 			{
 				var json = JsonUtility.ToJson(save, true);
 				await UniTask.RunOnThreadPool(() =>
 				{
-					File.WriteAllText(SavePath, json);
+					File.WriteAllText(path, json); // path уже вычислен
 				}, cancellationToken: token);
 				return true;
 			}
@@ -44,7 +45,8 @@ namespace Serialization
 
 		public async UniTask<bool> TryToLoadAsync(CancellationToken token)
 		{
-			if (!File.Exists(SavePath))
+			var path = SavePath; // ѕолучаем путь на главном потоке!
+			if (!File.Exists(path))
 			{
 				Debug.LogWarning("Save file not found.");
 				return false;
@@ -54,7 +56,7 @@ namespace Serialization
 			{
 				var json = await UniTask.RunOnThreadPool(() =>
 				{
-					return File.ReadAllText(SavePath);
+					return File.ReadAllText(path); // path уже вычислен
 				}, cancellationToken: token);
 
 				var data = JsonUtility.FromJson<PlayerSerializationData>(json);
@@ -76,13 +78,14 @@ namespace Serialization
 			}
 		}
 
-		public void DeleteProgress()
+		public async UniTask DeleteProgress()
 		{
 			if (File.Exists(SavePath))
 			{
 				try
 				{
 					File.Delete(SavePath);
+					await UniTask.NextFrame();
 					Debug.Log("Player progress deleted successfully.");
 				}
 				catch (System.Exception ex)

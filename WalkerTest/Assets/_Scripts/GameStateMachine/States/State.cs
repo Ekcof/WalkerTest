@@ -24,6 +24,7 @@ namespace Gamestates
 	public abstract class State : IState
 	{
 		[Inject] protected DiContainer _container;
+		[Inject] protected IGameStateMachine StateMachine;
 		public abstract GameStateType StateType { get; }
 
 		public abstract void Start();

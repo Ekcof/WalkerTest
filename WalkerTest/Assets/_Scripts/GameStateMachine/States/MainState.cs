@@ -13,13 +13,13 @@ namespace Gamestates
 {
 	public class MainState : State
 	{
-		private const double SAVE_PERIOD = 30d;
+		private const int SAVE_PERIOD = 10;
 		[Inject] private Player _player;
 		[Inject] private IGameStateMachine _gameStateMachine;
 		[Inject] private ISerializationManager _serializationManager;
 
 		[Inject(Id = "globalLight")] private Light2D _light;
-		private CompositeDisposable _compositeDisposable;
+		private CompositeDisposable _compositeDisposable = new();
 		private CancellationTokenSource _cts;
 		public override GameStateType StateType => GameStateType.MainState;
 
@@ -57,6 +57,7 @@ namespace Gamestates
 				await UniTask.Delay(TimeSpan.FromSeconds(SAVE_PERIOD), cancellationToken: token);
 				if (!token.IsCancellationRequested)
 				{
+					Debug.Log($"____Try to save");
 					await _serializationManager.TryToSaveAsync(token);
 				}
 			}
