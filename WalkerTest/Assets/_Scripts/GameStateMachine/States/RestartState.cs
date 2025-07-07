@@ -12,8 +12,7 @@ namespace Gamestates
 
 		public override void Start()
 		{
-
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+			LoadSceneAsync(SceneManager.GetActiveScene().name).Forget();
 		}
 
 		private async UniTask LoadSceneAsync(string sceneName)
