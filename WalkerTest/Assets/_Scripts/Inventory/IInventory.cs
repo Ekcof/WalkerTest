@@ -2,6 +2,7 @@ using Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 namespace Inventory
@@ -16,9 +17,9 @@ namespace Inventory
 	{
 		IEnumerable<IItem> AllItems { get; }
 		IEnumerable<IInventory> NestedInventories { get; }
+		IObservable<IItem> OnItemAdded { get; }
 		bool TryGetItem(string id, out IItem item);
 		void AddItems(IEnumerable<IItem> items);
-		bool TryAddItem(IItem item);
 		/// <summary>
 		/// Try to remove certain amount of item from inventory (good for stackable items).
 		/// </summary>
@@ -32,6 +33,6 @@ namespace Inventory
 		/// <param name="item"></param>
 		void RemoveItem(IItem item);
 		void SetItems(IEnumerable<SerializedItem> items);
-
+		int GetAmountById(string id);
 	}
 }

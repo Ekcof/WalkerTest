@@ -36,6 +36,7 @@ namespace UI
 			}
 			
 			var slot = _pool.Pop();
+			slot.transform.SetAsLastSibling();
 			slot.Show(message, HideLastSlot, color);
 			_slots.Enqueue(slot);
 			//LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);

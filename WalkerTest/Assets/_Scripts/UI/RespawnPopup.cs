@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Gamestates;
+using Inventory;
 using Scene.Character;
 using System;
 using System.Collections;
@@ -14,6 +15,8 @@ namespace UI
 	{
 		[Inject(Id ="mainCam")] private Camera _camera;
 		[Inject] private IGameStateMachine _stateMachine;
+		[Inject] private InventoryPopup _inventoryPopup;
+		[Inject] private LowerPanel _lowerPanel;
 		[Inject] private Player _player;
 
 		[SerializeField] private Button _respawnButton;

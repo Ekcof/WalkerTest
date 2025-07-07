@@ -25,14 +25,14 @@ namespace Serialization
 		public async UniTask<bool> TryToSaveAsync(CancellationToken token)
 		{
 			var save = _player.Serialize();
-			var path = SavePath; // ѕолучаем путь на главном потоке!
+			var path = SavePath;
 
 			try
 			{
 				var json = JsonUtility.ToJson(save, true);
 				await UniTask.RunOnThreadPool(() =>
 				{
-					File.WriteAllText(path, json); // path уже вычислен
+					File.WriteAllText(path, json);
 				}, cancellationToken: token);
 				return true;
 			}
@@ -45,7 +45,7 @@ namespace Serialization
 
 		public async UniTask<bool> TryToLoadAsync(CancellationToken token)
 		{
-			var path = SavePath; // ѕолучаем путь на главном потоке!
+			var path = SavePath;
 			if (!File.Exists(path))
 			{
 				Debug.LogWarning("Save file not found.");
@@ -56,7 +56,7 @@ namespace Serialization
 			{
 				var json = await UniTask.RunOnThreadPool(() =>
 				{
-					return File.ReadAllText(path); // path уже вычислен
+					return File.ReadAllText(path);
 				}, cancellationToken: token);
 
 				var data = JsonUtility.FromJson<PlayerSerializationData>(json);

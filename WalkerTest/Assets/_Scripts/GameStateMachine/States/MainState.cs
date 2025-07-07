@@ -8,6 +8,7 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Serialization;
+using UI;
 
 namespace Gamestates
 {
@@ -18,13 +19,20 @@ namespace Gamestates
 		[Inject] private IGameStateMachine _gameStateMachine;
 		[Inject] private ISerializationManager _serializationManager;
 
+		[Inject] private ILowerPanel _lowerPanel;
 		[Inject(Id = "globalLight")] private Light2D _light;
+
 		private CompositeDisposable _compositeDisposable = new();
 		private CancellationTokenSource _cts;
 		public override GameStateType StateType => GameStateType.MainState;
 
 		public override void Start()
 		{
+			if (!_lowerPanel.IsActive)
+			{
+				_lowerPanel.Activate();
+			}
+
 			_player.Health.Current.Subscribe(OnHealthChanged).AddTo(_compositeDisposable);
 			_cts?.CancelAndDispose();
 			_cts = new();
@@ -57,7 +65,6 @@ namespace Gamestates
 				await UniTask.Delay(TimeSpan.FromSeconds(SAVE_PERIOD), cancellationToken: token);
 				if (!token.IsCancellationRequested)
 				{
-					Debug.Log($"____Try to save");
 					await _serializationManager.TryToSaveAsync(token);
 				}
 			}

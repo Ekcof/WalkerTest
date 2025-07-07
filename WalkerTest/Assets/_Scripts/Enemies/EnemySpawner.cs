@@ -73,8 +73,8 @@ namespace Scene.Character
 		public void SpawnEnemy(SpawnPoint point)
 		{
 			var enemy = _pool.Pop();
-			enemy.Refresh();
 			enemy.transform.position = point.transform.position;
+			enemy.Refresh();
 			_activeEnemies.Add(enemy);
 		}
 

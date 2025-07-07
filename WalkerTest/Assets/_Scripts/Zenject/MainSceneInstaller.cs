@@ -18,6 +18,8 @@ public class MainSceneInstaller : BaseInstaller
 	[SerializeField] private RespawnPopup _respawnPopup;
 	[SerializeField] private JoyStick _joyStick;
 	[SerializeField] private PlayerLog _playerLog;
+	[SerializeField] private LowerPanel _lowerPanel;
+	[SerializeField] private InventoryPopup _inventoryPopup;
 	[Header("Registries")]
 	[SerializeField] private CharacterRegistry _characterRegistry;
 	[SerializeField] private BulletRegistry _bulletRegistry;
@@ -34,6 +36,8 @@ public class MainSceneInstaller : BaseInstaller
 		Bind(_player);
 		Bind(_playerLog);
 		Bind(_respawnPopup);
+		Bind(_lowerPanel);
+		Bind(_inventoryPopup);
 		
 		Bind(_characterRegistry);
 		Bind(_bulletRegistry);

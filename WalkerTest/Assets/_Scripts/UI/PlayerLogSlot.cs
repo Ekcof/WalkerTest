@@ -19,36 +19,23 @@ namespace UI
 
 		[Header("Animation")]
 		[SerializeField] private float _fadeDuration = 0.5f;
-		[SerializeField] private float _moveDistance = 40f;
-		[SerializeField] private float _moveDuration = 0.5f;
 
 		private Tween _tween;
 
 		public void Show(string message, Action onComplete, Color color = default)
 		{
-			// Move to bottom in hierarchy (UI order)
 			_text.text = message;
 			_text.color = color == default ? Color.white : color;
-			// Kill any previous animations
+
 			_tween?.Kill();
 			gameObject.SetActive(true);
-			transform.SetAsLastSibling();
 
-			// Prepare for animation
 			_canvasGroup.alpha = 0f;
-			RectTransform rect = transform as RectTransform;
-			Vector2 startPos = rect.anchoredPosition;
-			Vector2 downPos = startPos - Vector2.up * _moveDistance; // move down
 
-			rect.anchoredPosition = downPos;
 			_tween = DOTween.Sequence()
-				.Append(rect.DOAnchorPos(startPos, _moveDuration).SetEase(Ease.OutCubic))
-				.Join(_canvasGroup.DOFade(1f, _fadeDuration))
+				.Append(_canvasGroup.DOFade(1f, _fadeDuration))
 				.AppendInterval(_lifeTime)
-				.OnComplete(() =>
-				{
-					onComplete?.Invoke();
-				});
+				.OnComplete(() => { onComplete?.Invoke(); });
 		}
 
 		public void Hide(Action onComplete)

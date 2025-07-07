@@ -19,7 +19,9 @@ namespace Scene.Fight
 		[Inject] private Player _player;
 		[SerializeField] private int _ammo;
 		private IBulletConfig _currentConfig;
+
 		private IInventory Inventory => _player.Inventory;
+		public string AmmoId => DEFAULT_AMMO_TYPE; // TODO: make it configurable
 		public int Ammo => _ammo;
 		public IBulletConfig CurrentConfig => _currentConfig;
 

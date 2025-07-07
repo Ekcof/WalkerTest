@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using Zenject;
 
@@ -15,8 +16,9 @@ namespace Inventory
 
 		[SerializeField] private List<ItemToAdd> _itemsToAdd;
 		private bool _hasDeserializedItems;
-
+		private readonly Subject<IItem> _onItemAdded = new Subject<IItem>();
 		protected List<IItem> InternalItems = new();
+		public IObservable<IItem> OnItemAdded => _onItemAdded; // Только для подписки
 		public IEnumerable<IItem> AllItems => InternalItems;
 
 		public IEnumerable<IInventory> NestedInventories => throw new System.NotImplementedException();
@@ -56,7 +58,7 @@ namespace Inventory
 			}
 		}
 
-		public bool TryAddItem(IItem item)
+		private bool TryAddItem(IItem item)
 		{
 			if (item == null)
 			{
@@ -68,6 +70,7 @@ namespace Inventory
 			if (!item.IsStackable)
 			{
 				InternalItems.Add(item);
+				_onItemAdded.OnNext(item);
 				return true;
 			}
 
@@ -97,7 +100,7 @@ namespace Inventory
 				InternalItems.Add(newItem);
 				remainingAmount -= amountToAdd;
 			}
-
+			_onItemAdded.OnNext(item);
 			return true;
 		}
 
@@ -170,6 +173,13 @@ namespace Inventory
 					Debug.LogWarning($"Item config for ID {serializedItem.Id} not found.");
 				}
 			}
+		}
+
+		public int GetAmountById(string id)
+		{
+			return InternalItems
+				.Where(i => i.Id == id)
+				.Sum(i => i.Amount);
 		}
 	}
 }

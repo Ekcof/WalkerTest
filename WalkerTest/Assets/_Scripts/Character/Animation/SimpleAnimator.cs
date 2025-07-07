@@ -53,6 +53,9 @@ namespace Scene.Character
 
 		public void SetAnimation(string id, Action onComplete = null)
 		{
+			if (_image == null)
+				return;
+
 			if (_sequence != null && _sequence.IsActive())
 			{
 				_sequence.Kill();
@@ -101,6 +104,11 @@ namespace Scene.Character
 				SetDefaultAnimation();
 			}
 			_sequence?.Play();
+		}
+
+		private void OnDestroy()
+		{
+			_sequence?.Kill();
 		}
 	}
 }

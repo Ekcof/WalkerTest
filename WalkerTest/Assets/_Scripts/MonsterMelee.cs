@@ -56,7 +56,6 @@ namespace Scene.Character
 				return;
 			}
 
-			// If target has been changed
 			if (_currentTarget != nearest)
 			{
 				if (nearest != null)
