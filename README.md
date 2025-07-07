@@ -48,7 +48,7 @@
 ## Использованные сторонние фреймворки
 
 - [DOTween](https://dotween.demigiant.com/)
-- [Modern Procedural UI](https://assetstore.unity.com/packages/tools/gui/modern-procedural-ui-kit-163041?srsltid=AfmBOopn-cfp-mfrnN0qQsbGuy-u2wUzWUX8YROeWCQJLGp4mF-SqSe6))
+- [Modern Procedural UI](https://assetstore.unity.com/packages/tools/gui/modern-procedural-ui-kit-163041?srsltid=AfmBOopn-cfp-mfrnN0qQsbGuy-u2wUzWUX8YROeWCQJLGp4mF-SqSe6)
 - [UniRx](https://github.com/neuecc/UniRx)
 - [UniTask](https://github.com/Cysharp/UniTask)
-- [Zenject]([https://github.com/zenject/Zenject](https://assetstore.unity.com/packages/tools/utilities/extenject-dependency-injection-ioc-157735?srsltid=AfmBOopj-j373LwxTpgq9BHBDAKjEUk4ikFjBVLs1R7gHQitIq-32iPL))
+- [Zenject](https://assetstore.unity.com/packages/tools/utilities/extenject-dependency-injection-ioc-157735?srsltid=AfmBOopj-j373LwxTpgq9BHBDAKjEUk4ikFjBVLs1R7gHQitIq-32iPL)
