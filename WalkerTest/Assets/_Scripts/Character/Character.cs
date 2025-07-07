@@ -22,6 +22,7 @@ namespace Scene.Character
 		IAnimator Animator { get; }
 		float CurrentDamage { get; }
 		bool IsDead { get; }
+		float TimeOfDeath { get; }
 
 		void DropLoot();
 		void Refresh();
@@ -60,6 +61,7 @@ namespace Scene.Character
 		public abstract float CurrentDamage { get; }
 		public bool IsDead => Health.Current.Value <= 0;
 		public TargetType TargetType => _targetType;
+		public float TimeOfDeath { get; protected set; }
 
 		protected virtual void Start()
 		{
@@ -68,7 +70,11 @@ namespace Scene.Character
 
 		public virtual void Refresh()
 		{
+			CurrentState = null;
+			TimeOfDeath = 0;
+			Health?.Refresh();
 			_collider.enabled = true;
+			gameObject.SetActive(true);
 			Register();
 		}
 

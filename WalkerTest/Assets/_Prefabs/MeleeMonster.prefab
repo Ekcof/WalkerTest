@@ -225,7 +225,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7417807907797560494
 Transform:
   m_ObjectHideFlags: 0
@@ -263,6 +263,7 @@ MonoBehaviour:
   _name: 
   _collider: {fileID: 7417807907060653249}
   _targetType: 4
+  CanDropLoot: 1
   _currentDamage: 10
   _healthBar: {fileID: 7417807908706193599}
 --- !u!114 &7417807907797560488

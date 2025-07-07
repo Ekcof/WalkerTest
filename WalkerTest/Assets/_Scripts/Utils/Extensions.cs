@@ -37,52 +37,6 @@ public static class Extensions
 		}
 		return copy;
 	}
-
-	public static T GetRandomElement<T>(
-		this IEnumerable<T> source,
-		Func<T, bool> predicate = null,
-		bool throwOnEmpty = true)
-	{
-		if (source == null)
-		{
-			if (throwOnEmpty)
-				throw new InvalidOperationException("Source is null.");
-			return default;
-		}
-
-		var list = source as IList<T> ?? source.ToList();
-		if (list.Count == 0)
-		{
-			if (throwOnEmpty)
-				throw new InvalidOperationException("Cannot select a random element from an empty collection.");
-			return default;
-		}
-
-		var random = new System.Random();
-
-		if (predicate == null)
-		{
-			return list[random.Next(list.Count)];
-		}
-
-		var indices = Enumerable.Range(0, list.Count)
-								.OrderBy(_ => random.Next())
-								.ToList();
-
-		T lastTried = default!;
-		foreach (var idx in indices)
-		{
-			var element = list[idx];
-			lastTried = element;
-			if (predicate(element))
-			{
-				return element;
-			}
-		}
-
-		return lastTried;
-	}
-
 	public static IEnumerable<T> GetRandomUniqueElements<T>(this IEnumerable<T> source, int count, bool throwException = true)
 	{
 		if (source == null)
@@ -199,14 +153,20 @@ public static class Extensions
 		return (target - position).normalized;
 	}
 
-	public static bool HasAll(this TargetType self, TargetType flags)
+	public static bool HasAll<T>(this T self, T flags)
+		where T : Enum
 	{
-		return (self & flags) == flags;
+		long selfValue = Convert.ToInt64(self);
+		long flagsValue = Convert.ToInt64(flags);
+		return (selfValue & flagsValue) == flagsValue;
 	}
 
-	public static bool HasAnyCommon(this TargetType a, TargetType b)
+	public static bool HasAnyCommon<T>(this T a, T b)
+		where T : Enum
 	{
-		return (a & b) != 0;
+		long aValue = Convert.ToInt64(a);
+		long bValue = Convert.ToInt64(b);
+		return (aValue & bValue) != 0;
 	}
 
 	public static void SetListener(this UnityEngine.UI.Button button, Action action)

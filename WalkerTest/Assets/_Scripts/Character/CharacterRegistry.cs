@@ -9,6 +9,8 @@ namespace Scene.Character
 	{
 		bool TryGetTargetByName(string targetId, out ICharacter target);
 		bool TryGetTargets(string targetId, out IEnumerable<ICharacter> targets);
+		bool TryGetTargetsInRadius(Vector3 position, float radius, out IEnumerable<ICharacter> targets);
+
 		bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets);
 		void Register(ICharacter target);
 		void Unregister(ICharacter target);
@@ -18,13 +20,13 @@ namespace Scene.Character
 	{
 		private readonly List<ICharacter> _targetList = new();
 
-		private void Awake()
-		{  
-			//var charactersOnScene = FindObjectsOfType<Character>();
-			//foreach (var c in charactersOnScene)
-			//{
-			//	RegisterTarget(c);
-			//}
+		public bool TryGetTargetsInRadius(Vector3 position, float radius, out IEnumerable<ICharacter> targets)
+		{
+			targets = _targetList.Where(t =>
+	Vector3.Distance(t.Position, position) <= radius &&
+	!t.IsDead);
+
+			return targets.Any();
 		}
 
 		public bool TryGetTargetsInRadius(TargetType targetType, Vector3 position, float radius, out IEnumerable<ICharacter> targets)

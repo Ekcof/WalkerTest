@@ -96,8 +96,16 @@ namespace ComponentUtils
 
 		private void SpawnOneCopy()
 		{
-			var copy = _prefab.Copy(_parent);
-			_diContainer?.InjectGameObject(copy.gameObject);
+			T copy;
+			if (_diContainer != null)
+			{
+				copy = _diContainer.InstantiatePrefabForComponent<T>(_prefab, _parent);
+			}
+			else
+			{
+				copy = _prefab.Copy(_parent);
+			}
+
 			_pool.Push(copy.Deactivate());
 		}
 	}

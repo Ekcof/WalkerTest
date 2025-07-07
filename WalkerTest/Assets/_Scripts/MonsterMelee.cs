@@ -35,6 +35,7 @@ namespace Scene.Character
 			SetState(_idleState);
 			_detector.ToggleDetection(true, _preyTypes);
 		}
+
 		protected override void LateUpdate()
 		{
 			base.LateUpdate();
@@ -49,6 +50,7 @@ namespace Scene.Character
 			{
 				if (CurrentState != _deadState)
 				{
+					TimeOfDeath = Time.time;
 					SetState(_deadState);
 				}
 				return;

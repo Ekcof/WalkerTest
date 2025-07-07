@@ -17,11 +17,12 @@ public class MainSceneInstaller : BaseInstaller
 	[Header("UI")]
 	[SerializeField] private RespawnPopup _respawnPopup;
 	[SerializeField] private JoyStick _joyStick;
-	[SerializeField] private UI.PlayerLog _playerLog;
+	[SerializeField] private PlayerLog _playerLog;
 	[Header("Registries")]
 	[SerializeField] private CharacterRegistry _characterRegistry;
 	[SerializeField] private BulletRegistry _bulletRegistry;
 	[SerializeField] private ItemHolderRegistry _itemHolderRegistry;
+	[SerializeField] private EnemySpawnManager _enemyRegistry;
 
 
 	public override void InstallBindings()
@@ -37,6 +38,8 @@ public class MainSceneInstaller : BaseInstaller
 		Bind(_characterRegistry);
 		Bind(_bulletRegistry);
 		Bind(_itemHolderRegistry);
+		Bind(_enemyRegistry);
+
 		Bind<ShootableRegisty>();
 		Bind<GameStateMachine>();
 		Bind<SerializationManager>();
