@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using UI;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.Experimental.GraphView.GraphView;
-using static UnityEditor.Progress;
 
 namespace Scene.Character
 {

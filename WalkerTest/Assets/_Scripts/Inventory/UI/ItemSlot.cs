@@ -1,12 +1,9 @@
 using Scene.Character;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
-using static UnityEditor.Progress;
 
 namespace Inventory
 {

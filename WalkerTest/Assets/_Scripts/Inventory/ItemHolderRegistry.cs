@@ -1,11 +1,7 @@
 using ComponentUtils;
-using Scene.Character;
-using Scene.Fight;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.WSA;
 using Zenject;
 
 namespace Inventory
