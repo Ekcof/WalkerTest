@@ -1,62 +1,68 @@
+> [🇷🇺 Read this in Russian (README_RU.MD)](README_RU.MD)
+
 # Walker Game
-[Билд Android Apk](https://github.com/Ekcof/WalkerTest/blob/main/build.apk)
+[Android Apk Build](https://github.com/Ekcof/WalkerTest/blob/main/build.apk)
 
-Данная игра представляет собой **top-down платформер** с непрерывным спауном врагов.  
-Игрок управляет персонажем с помощью виртуального джойстика, расположенного на экране, и кнопок на нижней панели управления.
-Игрок может наносить урон врагам с помощью пистолета, имеющего ограниченную дальность поражения и требующего питания патронами. При поражении игрока до 0% здоровья у него есть возможность
+This game is a **top-down platformer** with continuous enemy spawning.  
+The player controls a character using a virtual joystick on the screen and buttons on the bottom control panel.  
+The player can damage enemies with a pistol that has limited range and requires ammo. When the player's health reaches 0%, there is a chance to...
 
-![Демонстрация геймплея](1.gif)
-![Демонстрация геймплея](2.gif)
-## Фичи проекта
+![Gameplay Demo](1.gif)
+![Gameplay Demo](2.gif)
 
-В этом проекте реализованы принципы модульности и расширяемости. Основные особенности:
+## Project Features
 
-### Универсальный компонент Movement
+This project is built around modularity and extensibility. Main highlights:
 
-- **Movement** — компонент, управляющий движением игрока, мобов и даже камеры.
-- Реализована заготовка под расширение для NavMesh (сейчас не используется, но предусмотрена для будущего расширения).
+### Universal Movement Component
 
-### Регистры целей, мобов и лута
+- **Movement** — a component managing movement for the player, mobs, and even the camera.
+- Includes a stub for future NavMesh extension (not used yet, but prepared for scalability).
 
-- **Классы-регистры** обеспечивают быстрый доступ к любым интерактивным объектам на сцене.
-- Можно легко получать и находить ближайшие объекты с помощью компонента **Detector** — подходит как для NPC, так и для игрока.
+### Registries for Targets, Mobs, and Loot
 
-### Система инвентаря и предметов
-<img src="screen1.png" width="50%" alt="Инвентарь" />
+- **Registry classes** allow fast access to any interactive object in the scene.
+- You can easily fetch and find the nearest objects using the **Detector** component — works for both NPCs and the player.
 
-- Реализованы компоненты, наследующие от `IInventory`, позволяющие создавать собственное хранилище предметов для игрока и мобов.
-- Есть окно инвентаря с визуальным отображением предметов в слотах.
-- Поддержка стакуемых предметов (например, патроны до 100 в одном слоте).
+### Inventory & Items System
 
-### Респаун врагов
+<img src="screen1.png" width="50%" alt="Inventory" />
 
-- **EnemySpawnManager** — масштабируемый и настраиваемый компонент для непрерывного спауна врагов определённого типа в заданных точках.
-- Можно задавать время между спаунами и время удаления тел.
+- Components inheriting from `IInventory` allow you to create custom item storage for both player and mobs.
+- Inventory window displays items visually in slots.
+- Supports stackable items (e.g., ammo up to 100 per slot).
 
-### Использование паттерна Pool
+### Enemy Respawn
 
-- **Pool паттерн** применяется для переиспользования объектов мобов и предметов на сцене.
-- Существенно повышает производительность при большом количестве объектов и длительной игре.
+- **EnemySpawnManager** — a scalable and configurable component for continuous enemy spawning at specified points.
+- You can set spawn intervals and corpse removal times.
+
+### Pool Pattern Usage
+
+- The **pool pattern** is used for efficient reuse of mobs and item objects on the scene.
+- Greatly improves performance with many objects and long game sessions.
 
 ### PlayerLog
 
-- UI-компонент для отображения статуса или истории недавних действий игрока (например, какие предметы были подобраны, обнаружены ли поблизости враги и т.д.).
+- UI component to display status or a history of recent player actions (e.g., picked-up items, detected nearby enemies, etc).
 
-### Сохранение прогресса
-- SerializationManager управляет созданием сохранения. Прогресс игрока и его инвентарь сохраняется в json файл, который, например можно использовать для хранения его удаленно с помощью сервисов типа GamePush.
+### Save System
+
+- The `SerializationManager` handles save creation. Player progress and inventory are saved to a JSON file, which can be uploaded remotely via services like GamePush.
 
 ### Game State Machine
-- Управляет стейтами игры (загрузка, основной, поражение, респаун, рестарт игры). Это позволяет разделить мастер-логику игры на отдельные классы для уменьшения связанности и читабельности. Отсюда же происходит изменение UI в зависимости от состояния игры. Эта система также является расширяемой и позволяющей создать новые стейты со своей логикой.
 
-### Покадровые анимации
+- Manages game states (loading, main, defeat, respawn, restart). This allows you to split the game's master logic into independent classes, reducing coupling and improving readability. UI updates automatically based on the game state. The system is extensible and lets you add new states with custom logic.
 
-- Создан компонент SimpleAnimator, позволяющий делать простые покадровые анимации с определенным Id и FPS. Легко использовать в коде. Альтернатива громоздкому аниматору Unity и куче дополнительных файлов в проекте, когда он не нужен.
-- Атлас покадровых анимаций частично создан с помощью генерации изображений в ChatGPT 4.1.
+### Animation
 
-## Использованные сторонние фреймворки
+- Includes a `SimpleAnimator` component for basic frame-by-frame animations with specified Id and FPS. Easy to use in code. Serves as an alternative to Unity's heavy Animator and extra files when not needed.
+- Part of the animation atlas was generated with LLM ChatGPT 4.1.
+
+## Third-party Frameworks
 
 - [DOTween](https://dotween.demigiant.com/)
-- [Modern Procedural UI](https://assetstore.unity.com/packages/tools/gui/modern-procedural-ui-kit-163041?srsltid=AfmBOopn-cfp-mfrnN0qQsbGuy-u2wUzWUX8YROeWCQJLGp4mF-SqSe6)
+- [Modern Procedural UI](https://assetstore.unity.com/packages/tools/gui/modern-procedural-ui-kit-163041)
 - [UniRx](https://github.com/neuecc/UniRx)
 - [UniTask](https://github.com/Cysharp/UniTask)
-- [Zenject](https://assetstore.unity.com/packages/tools/utilities/extenject-dependency-injection-ioc-157735?srsltid=AfmBOopj-j373LwxTpgq9BHBDAKjEUk4ikFjBVLs1R7gHQitIq-32iPL)
+- [Zenject](https://assetstore.unity.com/packages/tools/utilities/extenject-dependency-injection-ioc-157735)
