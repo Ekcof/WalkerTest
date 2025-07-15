@@ -1,5 +1,5 @@
 # Walker Game
-> [In English](README.MD)
+> [In English](README.md)
 > 
 [Билд Android Apk](https://github.com/Ekcof/WalkerTest/blob/main/build.apk)
 
