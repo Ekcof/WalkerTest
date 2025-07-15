@@ -1,6 +1,6 @@
+# Walker Game
 > [🇷🇺 Read this in Russian (README_RU.MD)](README_RU.md)
 
-# Walker Game
 [Android Apk Build](https://github.com/Ekcof/WalkerTest/blob/main/build.apk)
 
 This game is a **top-down platformer** with continuous enemy spawning.  
